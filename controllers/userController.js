@@ -13,8 +13,10 @@ const userController = {
     },
 
     getUserById: ({params}, res) => {
-        User.findOne({_id: params.id})
+        User.findOne({_id: params.userId})
             .select('-__v')
+            .populate('thoughts')
+            .populate('friends')
             .then((dbUserData) => {
                 if (!dbUserData) {
                     res.status(404).json({ message: 'No user found with this id' });
@@ -40,7 +42,7 @@ const userController = {
     },
 
     updateUser: ({params, body}, res) => {
-        User.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
+        User.findOneAndUpdate({ _id: params.userId }, body, { new: true, runValidators: false })
             .then((dbUserData) => {
                 if (!dbUserData) {
                     res.status(404).json({ message: 'No user found with this id' });
@@ -55,7 +57,7 @@ const userController = {
     },
 
     deleteUser: ({params}, res) => {
-        User.findOneAndDelete({ _id: params.id })
+        User.findOneAndDelete({ _id: params.userId })
             .then((dbUserData) => {
                 if (!dbUserData) {
                     res.status(404).json({ message: 'No user found with this id' });
@@ -72,8 +74,8 @@ const userController = {
     addFriend: ({params}, res) => {
         User.findOneAndUpdate(
             {_id: params.userId},
-            {$push: {friends: params.userId}},
-            {new: true, runValidators: true}
+            {$push: {friends: params.friendId}},
+            {new: true, runValidators: false}
         )
             .then((dbUserData) => {
                 if (!dbUserData) {
@@ -90,9 +92,9 @@ const userController = {
 
     removeFriend: ({params}, res) => {
         User.findOneAndUpdate(
-            {_id: params.userId},
-            {$pull: {friends: params.userId}},
-            {new: true, runValidators: true}
+            { _id: params.userId },
+            {$pull: { friends: params.friendId }},
+            {new: true, runValidators: false}
         )
             .then((dbUserData) => {
                 if (!dbUserData) {

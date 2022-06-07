@@ -4,17 +4,17 @@ const { getAllUsers, getUserById, createUser, updateUser, deleteUser, addFriend,
 router
     .route('/')
     .get(getAllUsers)
-    .post(createUser);
+    .post(createUser)
 
 router
-    .route('/:id')
+    .route('/:userId')
     .get(getUserById)
     .put(updateUser)
     .delete(deleteUser)
-    .post(addFriend);
 
 router
-    .route('/:id/:friendId')
-    .delete(removeFriend);
+    .route('/:userId/friends/:friendId')
+    .put(addFriend)
+    .delete(removeFriend)
 
 module.exports = router;
