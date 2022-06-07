@@ -4,24 +4,21 @@ const { getAllThoughts, getThoughtById, createThought, updateThought, deleteThou
 
 router
     .route('/')
-    .get(getAllThoughts);
+    .get(getAllThoughts)
+    .post(createThought)
 
 router
     .route('/:thoughtId')
     .get(getThoughtById)
     .put(updateThought)
-    .put(addReaction);
-
-router
-    .route('/:UserId')
-    .post(createThought)
+    .post(addReaction);
 
 router
     .route('/:userId/:thoughtId')
     .delete(deleteThought)
 
 router
-    .route('/:userId/:thoughtId/:reactionId')
-    .delete(deleteReaction)
+    .route('/:thoughtId/:reactionId')
+    .put(deleteReaction)
 
 module.exports = router;
